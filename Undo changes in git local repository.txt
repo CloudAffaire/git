@@ -1,0 +1,129 @@
+##------------------------------------------
+##  Undo changes in git local repository  ##
+##------------------------------------------
+## This demo is a continuation from previous blog post
+## Create a new file file2 and delete file1
+echo "name: debjeet" > file2 && echo "fav game: football" >> file2 
+
+## Remove the file file1
+rm file1
+
+##  Check git status > file1 deleted and new untracked file2
+git status
+
+## Add the change to staging
+git add . # git add (.)dot or (*)start will add all changes in working tree to staging area
+
+## Add the change to local repository
+git commit -m "file2 created and file1 deleted"
+
+## Check git log
+git log -p
+
+## Check git status > our working tree, staging area and local repository is consistent
+git status
+
+##################################
+##  Undo a working tree change  ##
+##################################
+## Change file content (fav game changed from football to tennis in working tree)
+vi file2
+-------------------
+name: debjeet
+fav game: tennis
+-------------------
+:wq
+
+## Check git status > working tree is not clean due to change
+git status
+
+## Get difference between working tree and staging area (fav game changed to tennis in working tree)
+git diff
+
+#discard the change in working tree
+git checkout -- file2
+
+## Check git status > working tree is clean again
+git status
+
+## Difference between working tree and staging area
+git diff
+
+## Fav game tennis changed to football again
+cat file2
+
+##################################
+##  Undo a staging area change  ##
+##################################
+## Change file content (fav game changed from football to cricket in working tree)
+vi file2
+-------------------
+name: debjeet
+fav game: cricket
+-------------------
+
+## Add the change from working tree to staging area
+git add file2
+
+## Get the differences between working tree and staging area (no change as changes are already added)
+git diff
+
+## Get the differences between staging area and local repo (change present as file is not committed yet)
+git diff --staged
+
+## Check git status > changes are ready to get committed
+git status
+
+## Discard changes in staging area
+git reset HEAD file2
+
+## Get the differences between staging area and local repo (no change as we discarded the change from staging area)
+git diff --staged
+
+## Get the differences between working tree and staging area (change present as working tree and staging area is not consistent)
+git diff
+
+## Discard changes in working tree too
+git checkout -- file2
+
+## Get the difference > file2 is consistent across working tree, staging area and local repo
+git diff --staged
+git diff
+
+## Check git status > file2 is consistent across working tree, staging area and local repo
+git status
+
+## Check the content of the file2 > fav game is changed to football again
+cat file2
+
+####################################
+##  Undo local repository change  ##
+####################################
+## Check git log
+git log --oneline
+
+## Get the commit id for the commit where file1 was added and note it down
+#dc8db78 file1 added
+
+## Check working tree files (file1 does not exist)
+ls
+
+## Check git status > our git repo is consistent
+git status
+
+## Restore the file file1 from local repository (file1 will be restored to working tree and staging area)
+git checkout dc8db78 -- file1 #replace the commit id
+
+## Check working tree files (file1 restored)
+ls
+
+## Check the status > file1 is ready for commit again
+git status
+
+## Finally commit the changes
+git commit -m "file1 restored"
+
+###############
+##  cleanup  ##
+###############
+cd .. && rm -rf mygit

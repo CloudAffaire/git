@@ -1,0 +1,134 @@
+##-------------------------
+##  Git Rewrite History  ##
+##-------------------------
+## Create new directory and initialize git and get inside the directory
+git init mygit && cd mygit
+
+## Add your user name and email to git config
+git config --local user.name "Debjeet" && \
+git config --local user.email "debjeet@cloudaffaire.com"
+
+## Create a file file1 and commit
+echo "commit: A" > file1
+git add file1 && git commit -m "commit A | file added"
+
+## Create a file file2 and commit
+echo "commit: B" > file2
+git add file2 && git commit -m "commit A | file added"
+
+## Check logs
+git log --oneline
+
+## Edit the last commit message (update commit A | file added to commit B | file added)##
+git commit --amend
+
+## Check logs
+git log --oneline
+
+## Create a file file3 and commit
+echo "commit: C" > file3
+git add file3 && git commit -m "commit C | file added"
+
+## Create a file file4 and commit
+echo "commit: D" > file4
+git add file4 && git commit -m "commit D | file added"
+
+## Check logs
+git log --oneline
+
+# 5292aa3 (HEAD -> master) commit D | file added
+# 17d883c commit C | file added
+# 1a2f09d commit B | file added
+# 48f0fdb commit A | file added
+
+#############################
+##  Edit multiple commits  ##
+#############################
+## Replace pick with reword and then edit comment one by one
+git rebase -i HEAD~3
+
+## Check logs
+git log --oneline
+
+# 07208aa (HEAD -> master) commit D | file4 added
+# e43bf07 commit C | file3 added
+# 66c1629 commit B | file2 added
+# 48f0fdb commit A | file added
+
+## Check what changed
+git reflog
+
+## Create a branch and switch to that branch
+git branch slave && git checkout slave
+
+## Create a file file5 and commit
+echo "commit: E" > file5
+git add file5 && git commit -m "commit E | file5 added"
+
+## Create a file file6 and commit
+echo "commit: F" > file6
+git add file6 && git commit -m "commit F | file6 added"
+
+## Check logs
+git log --oneline
+
+# d5da45b (HEAD -> slave) commit F | file6 added
+# aafd950 commit E | file5 added
+# 07208aa (master) commit D | file4 added
+# e43bf07 commit C | file3 added
+# 66c1629 commit B | file2 added
+# 48f0fdb commit A | file added
+
+#######################################################################
+##  Squash multiple commits of a branch to a single commit in merge  ##
+#######################################################################
+git checkout master && git merge --squash slave
+git commit -m "commit E | file5 & file6 added"
+
+## Check logs
+git log --oneline
+
+# 58847dc (HEAD -> master) commit E | file5 & file6 added
+# 07208aa commit D | file4 added
+# e43bf07 commit C | file3 added
+# 66c1629 commit B | file2 added
+# 48f0fdb commit A | file added
+
+########################################
+##  Squash multiple commits together  ##
+########################################
+## Replace pick with squash and in next window edit the comment
+git rebase -i HEAD~4
+
+## Check logs
+git log --oneline
+
+# a57d774 (HEAD -> master) commit E | file5 & file6 added
+# 4f8829e commit D | file4 added
+# d1474d5 commit B | file2 & file3 added
+# 48f0fdb commit A | file added
+
+##########################
+##  Remove all history  ##
+##########################
+## Create a new orphan branch
+git checkout --orphan latest_branch
+
+## Add all the files and commit
+git add -A && git commit -am "git reset"
+
+## Delete the master branch
+git branch -D master
+
+## Rename the orphan branch to master
+git branch -m master
+
+## Check logs
+git log --oneline
+
+# c517391 (HEAD -> master) git reset
+
+###############
+##  Cleanup  ##
+###############
+cd .. && rm -rf mygit

@@ -1,0 +1,136 @@
+##--------------------------------
+##  Git Branching And Reabsing  ##
+##--------------------------------
+#####################
+##  Git Branching  ##
+#####################
+## Create new directory and initialize git and get inside the directory
+git init mygit && cd mygit
+
+## Add your user name and email to git config
+git config --local user.name "Debjeet" && \
+git config --local user.email "debjeettoni@gmail.com"
+
+## Create a alias for visual presentation of logs
+alias graph="git log --all --decorate --oneline --graph"
+
+## Create a file file1 and commit
+echo "hello master" > file1
+git add file1 && git commit -m "commit A | file1 added"
+
+## Create a file file2 and commit
+echo "hello master" >> file2
+git add file2 && git commit -m "commit B | file2 added"
+
+## Create a branch
+git branch slave
+
+## Create a file file3 and commit
+echo "hello master" > file3
+git add file3 && git commit -m "commit C | file3 added"
+
+## Switch to branch slave
+git checkout slave
+
+## Create a file file4 and commit
+
+echo "hello slave" > file4
+git add file4 && git commit -m "commit D | file4 added"
+
+## Create a file file5 and commit
+echo "hello slave" > file5
+git add file5 && git commit -m "commit E | file5 added"
+
+## Check graph
+graph
+
+# A------>B------>C (master)
+#         \
+#          D------>E (slave)
+
+## Merge master and slave
+git checkout master && git merge slave
+
+## Delete slave branch
+git branch -d slave
+
+## Check graph
+graph
+
+# A------>B------>C------->F (master)
+#         \              /
+#          D------>E-----
+
+###############
+##  cleanup  ##
+###############
+cd .. && rm -rf mygit
+
+####################
+##  Git Rebasing  ##
+####################
+## Create new directory and initialize git and get inside the directory
+git init mygit && cd mygit
+
+## Add your user name and email to git config
+git config --local user.name "Debjeet" && \
+git config --local user.email "debjeet@cloudaffaire.com"
+
+## Create a file file1 and commit
+echo "hello master" > file1
+git add file1 && git commit -m "commit A | file1 added"
+
+## Create a file file2 and commit
+echo "hello master" > file2
+git add file2 && git commit -m "commit B | file2 added"
+
+## Create a branch
+git branch slave
+
+## Create a file file3 and commit
+echo "hello master" > file3
+git add file3 && git commit -m "commit C | file3 added"
+
+## Switch to branch slave
+git checkout slave
+
+## Create a file file4 and commit
+echo "hello slave" > file4
+git add file4 && git commit -m "commit D | file4 added"
+
+## Create a file file5 and commit
+echo "hello slave" > file5
+git add file5 && git commit -m "commit E | file5 added"
+
+## Check graph
+graph
+
+# A------>B------>C (master)
+#         \
+#          D------>E (slave)
+
+## Rebase slave to master (Never rebase a public branch)
+git rebase master
+
+## Check graph (observe commit D and E hash has been changed)
+graph
+
+# A------>B------>C (master)
+#         \
+#          D*------>E* (slave)
+
+## Merge slave to master
+git checkout master && git merge slave
+
+## Delete slave branch
+git branch -d slave
+
+## Check graph
+graph
+
+# A------>B------>C------>D------>E (master)
+
+###############
+##  Cleanup  ##
+###############
+cd .. && rm -rf mygit

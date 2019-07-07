@@ -1,0 +1,79 @@
+##---------------------------------------
+##  Git local repository concepts  ##
+##---------------------------------------
+## login to the system where you have installed git and created your 1st repo as per the previous blog post
+## Go inside mygit directory
+cd mygit
+## Create a file named file1 (file will be created in working tree)
+echo "name: debjeet" > file1 && echo "fav color: blue" >> file1
+
+## Check git status > one untracked file found
+git status
+
+## Add the file to git index (file will be added to staging area)
+git add file1
+
+## Check git status > file is added to git index and is ready for commite
+git status
+
+## Before commit you can add your user name and email to git config
+git config --local user.name "Debjeet" && \
+git config --local user.email "debjeet@cloudaffaire.com"
+
+## View git config
+git config --list #git config is stored in config file inside .git directory
+cat .git/config
+
+## You can edit your git config file using git config --local --edit or vi .git/config
+
+## Commit the file (file will be added to local repository)
+git commit -m "file1 added"
+
+## Check git log
+git log
+
+## Check git status > file is consistent across working tree, staging area and local repo
+git status
+
+## Edit file1 and change fav color to green(will be edited in working tree)
+vi file1
+------------
+name: debjeet
+fav color: green
+------------
+:wq
+
+## Check git status > changes are not added to staging area yet
+git status
+
+## Get difference between staging area in working tree (blue is changed to green)
+git diff
+
+## Get difference between local repository and staging (no difference as we have not staged the changes yet)
+git diff --staged
+
+## Stage the changes (now our working tree and staging area has same data)
+git add file1
+
+## Check git status > changes are ready to be committed
+git status
+
+## Difference between working tree and staging (since we already staged by git add, no difference)
+git diff
+
+## Difference between the staging area and local repository (not same as we have not committed yet)
+git diff --staged
+
+## Commit the file (file will be added to the local repository)
+git commit -m "file1 edited"
+
+## File will be consistent in all three space
+git diff
+git diff --staged
+git status
+
+## Check the log
+git log --oneline
+
+## If you want to check what changed in local repository
+git log -p

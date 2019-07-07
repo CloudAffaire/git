@@ -117,7 +117,7 @@ git push -u --force origin master
 git remote rm destination
 git remote -v
 
-#add remote origin: git remote add origin https://github.com/CloudAffaire/mygit.git
-#fetch remote repo: git fetch origin remote_slave
-#merge the update from remote repo to local repo: git merge origin/master
-#instead of fetch and merge we can also pull from remote repo: git pull
+##add remote origin: git remote add origin https://github.com/CloudAffaire/mygit.git
+##fetch remote repo: git fetch origin remote_slave
+##merge the update from remote repo to local repo: git merge origin/master
+##instead of fetch and merge we can also pull from remote repo: git pull

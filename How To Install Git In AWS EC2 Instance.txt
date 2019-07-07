@@ -1,0 +1,47 @@
+##------------------------------------------
+## How to install git in AWS EC2 instance ##
+##------------------------------------------
+
+#########################
+##  Git: Installation  ##
+#########################
+## Create an EC2 instance with Amazon Linux 2 with internet access
+## Connect to your instance using putty
+
+## Perform a quick software update on your instance:
+sudo yum update -y
+
+## Install git in your EC2 instance
+sudo yum install git -y
+
+## Check git version
+git version
+
+################################################
+## Setup git local repository in EC2 instance ##
+################################################
+## Create a directory named employee
+mkdir mygit
+
+## Get inside mygit directory
+cd mygit/
+
+## Initialize git local repository
+git init
+
+## Observe .git file is created in your local git repository which 
+## contains data and metadata of your local git repository
+ls -a
+ls -a .git/
+
+## Check git status
+git status
+
+## Getting help from command line
+git help
+
+## List all git commands and sub-commands
+git help -a
+
+## Getting help for a particular git command
+git help <command> # for example git help init will list details for git init command.

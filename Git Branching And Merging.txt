@@ -1,0 +1,191 @@
+##-------------------------------
+##  Git branching and merging  ##
+##-------------------------------
+## Create new directory and initialize git and get inside the directory
+git init mygit && cd mygit
+
+## Create a file file1
+echo "hello from branch master" > file1
+
+## Before commit add your user name and email to git config
+git config --local user.name "Debjeet" && \
+git config --local user.email "debjeet@cloudaffaire.com"
+
+## Commit file1
+git add file1 
+git commit -m "commit: A"
+
+## List git branches > we are in default master branch
+git branch
+
+## Get the logs
+git log --all --decorate --oneline --graph
+
+## Create a alias for above command
+alias graph="git log --all --decorate --oneline --graph"
+
+# A (HEAD -> master)
+
+## Edit the file1 again under master branch
+echo "hello again! from branch master" >> file1
+
+## Commit file1
+git add file1 && \
+git commit -m "commit: B"
+
+## Check graph
+graph
+
+# A------>B (HEAD -> master)
+
+## Create a branch named slave1
+git branch slave1
+
+## Create another branch named slave2
+git branch slave2
+
+## Check all the branch for this git repo (HEAD pointer is pointing to master branch)
+git branch
+
+## Check the graph (HEAD pointer is pointing to master branch)
+graph
+
+# A------>B (HEAD -> master, slave1, slave2)
+
+## Switch to slave1 branch
+git checkout slave1
+
+## Check the graph (HEAD pointer is pointing to slave1 branch)
+graph
+
+# A------>B (HEAD -> slave1, slave2, master)
+
+## Check the branch (we are now in slave1 branch)
+git branch
+
+## Check git status
+git status
+
+## Edit file1 under slave1 branch
+echo "hello from branch slave1" >> file1
+
+## Commit file1 under slave1 branch
+git add file1 && \
+git commit -m "commit: C"
+
+## Check the graph (HEAD pointer is pointing to slave1 branch)
+graph
+
+# A------>B (slave2, master)
+#          \
+#           C (HEAD -> slave1)
+
+## Switch to slave2 branch
+git checkout slave2
+
+## Check content of file1 ("hello from branch slave1" not present in slave2 branch)
+cat file1
+
+## Edit file1 and add fav slave2
+echo "hello from branch slave2" >> file1
+
+## Commit file1 under slave2 branch (note we are both staging and commiting in a single command using -a switch)
+git commit -am "commit: D"
+
+## Check the graph (HEAD pointer is pointing to slave2 branch)
+graph
+
+#           D (HEAD -> slave2)
+#          /
+# A------>B (master)
+#          \
+#           C (slave1)
+
+###########################
+##  fast forward mearge  ##
+###########################
+## Check what will be merged (will merge slave2 with master)
+git diff master..slave2
+
+## From the master branch we will merge slave2 (note Fast-forward)
+git checkout master && \
+git merge slave2
+
+## Check the graph (master has catched up with slave2 branch)
+graph
+
+# A------>B------> D (HEAD -> master, slave2)
+#          \
+#           C (slave1)
+
+## Get file1 content (due to merge with slave2, master branch has slave2 information)
+cat file1
+
+## Check with branch are merged with which one (slave2 is merged with master)
+git branch --merged
+
+## Now branch slave2 is merged with branch master it can be deleted
+git branch -d slave2
+
+## Check the graph (slave2 branch has been deleted)
+graph
+
+# A------>B------> D (HEAD -> master)
+#          \
+#           C (slave1)
+
+## If we try to delete slave1 branch, it will not get deleted since its not yet merged with master
+git branch -d slave1
+
+#######################
+##  three way merge  ##
+#######################
+## Will merge slave1 with master
+## Try to merge slave1 with master (conflict will be detected)
+git merge slave1
+
+## Check the conflict
+cat file1
+
+## Check git status > You have un-merged paths
+git status
+
+#you can abort merge using "git merge --abort" command
+
+## Check the conflict
+cat file1
+
+## Resolve conflict (remove <<<<<<<, =======, >>>>>>> from the file and commit)
+vi file1
+----------------
+hello from branch master
+hello again! from branch master
+hello from branch slave2
+hello from branch slave1
+----------------
+:wq
+
+## Add and commit the changes
+git commit -am "commit: E"
+
+## Check the graph (HEAD pointer is pointing to master branch and has slave1 branch changes)
+graph
+
+# A------>B------>D------>E (HEAD -> master)
+#          \             /
+#           C (slave1)---
+
+## Delete slave1 branch
+git branch -d slave1
+
+## Check graph (slave1 branch no longer present)
+graph
+
+# A------>B------>D------>E (HEAD -> master)
+#          \             /
+#           C------------
+
+###############
+##  cleanup  ##
+###############
+cd .. && rm -rf mygit/

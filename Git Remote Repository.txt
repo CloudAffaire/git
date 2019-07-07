@@ -1,0 +1,123 @@
+##--------------------------------------
+##  Git remote repository and GitHub  ##
+##--------------------------------------
+## login to your github account and create a repository
+## In our case https://github.com/CloudAffaire/mygit.git 
+
+## login to your local instance and clone the remote repository (will ask for your github credentials)
+git clone https://github.com/CloudAffaire/mygit.git && cd mygit
+
+## Check remote repository
+git remote -v
+
+## Add your user name and email to git config
+git config --local user.name "Debjeet" && \
+git config --local user.email "debjeet@cloudaffaire.com"
+
+## Create a file and commit in local repository
+echo "hello from local_master" > local_master
+git add local_master && git commit -m "added in local repo master branch"
+
+## Check git log 
+git log --oneline
+
+## Push the change in remote repository (will ask for your github credentials)
+git push
+
+## Check git log (HEAD -> master, origin/master)
+git log --oneline
+
+## Create a file and commit in remote repository 
+file name: remote_master
+file content: "hello from remote_master"
+commit message: "added in remote repo master branch"
+
+## Pull the changes in local repo
+git pull
+
+## Check git log ((HEAD -> master, origin/master)
+git log
+
+## Check local repo working tree (file remote_master has been pulled)
+ls
+
+## Create a branch in local repo
+git branch local_slave
+
+## Switch to slave branch
+git checkout local_slave
+
+## Create a file in local local_slave branch and commit
+echo "hello from local_slave" > local_slave
+git add local_slave && git commit -m "added in local repo slave branch"
+
+## Push the branch in remote repository (will ask for your github credentials)
+git push --set-upstream origin local_slave
+
+## In remote repo create another branch remote_slave
+## Craete a file in remote remote_slave branch and commit
+## file name: remote_slave
+## file content: "hello from remote_slave"
+## commit message: "added in remote repo slave branch"
+
+## Switch to local master branch 
+git checkout master
+
+## Pull remote_slave branch from remote repo (will ask for your github credentials)
+git pull origin remote_slave
+
+## Check files (remote_slave file pulled from remote repo)
+ls
+
+## Merge local slave with master
+git merge local_slave
+
+## Delete the local slave branch
+git branch -d local_slave
+ 
+## Check files (local_slave file added under master branch)
+ls
+
+#push the changes to remote repo (remote_slave file pulled from remote repo)
+git push
+
+#check remote repo master branch(all 4 files exist) 
+
+## Delete remote branches
+git push origin --delete remote_slave
+git push origin --delete local_slave
+
+## Check logs
+git log --oneline
+
+#check remote repo (local_slave and remote_slave branch deleted)
+
+###############
+##  cleanup  ##
+###############
+## Clear commits in remote repo
+git checkout --orphan clean_branch
+git add -A  # Add all files and commit them
+git commit -m "Cleanup"
+git branch -D master  # Deletes the master branch
+git branch -m master  # Rename the current branch to master
+git push -f origin master  # Force push master branch to github
+git gc --aggressive --prune=all     # remove the old files
+
+
+## clear files and commits remote repo
+cd .. && rm -rf mygit
+git init mygit && cd mygit
+echo "Demo git repository" > README.md
+git add README.md && git commit -m "README.md added"
+git remote add origin https://github.com/CloudAffaire/mygit.git
+git push -u --force origin master 
+ 
+## Remove remote repository reference from local repository
+git remote rm destination
+git remote -v
+
+#add remote origin: git remote add origin https://github.com/CloudAffaire/mygit.git
+#fetch remote repo: git fetch origin remote_slave
+#merge the update from remote repo to local repo: git merge origin/master
+#instead of fetch and merge we can also pull from remote repo: git pull

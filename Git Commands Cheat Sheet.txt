@@ -1,0 +1,120 @@
+##------------------------------
+##  Git Commands Cheat Sheet  ##
+##------------------------------
+## Check git version
+git version
+
+## Initialize git local repository
+git init
+
+## Initialize git local repository with directory
+git init <directory>
+
+## Check git status
+git status
+
+## Getting help from command line
+git help
+
+## List all git commands and sub-commands
+git help -a
+
+## Getting help for a particular git command
+git help <command> # for example git help init will list details for git init command.
+
+## Add a file in staging area
+git add <file>
+
+## Add all in staging
+git add .
+
+## Commit a change
+git commit -m "<commit message>"
+
+## Get difference between staging area in working tree
+git diff
+
+## Get difference between local repository and staging
+git diff --stage
+
+## Check the log
+git log --oneline
+
+## Get the logs
+git log --all --decorate --oneline --graph
+
+## Create a alias for above command 
+alias graph="git log --all --decorate --oneline --graph"
+
+## Check logs
+git reflog
+
+## Discard the change in working tree
+git checkout -- <file>
+
+## Discard changes in staging area
+git reset HEAD <file>
+
+## Restore the file file1 from local repository (file1 will be restored to working tree and staging area)
+git checkout <hash> -- <file>
+
+## Add your user name and email to git config
+git config --local user.name "Debjeet"
+git config --local user.email "debjeettoni@gmail.com"
+
+## Create a branch
+git branch <branch>
+
+## List all branches
+git branch
+
+## Switch to another branch
+git checkout <branch>
+
+## Check difference between two branches
+git diff <source_branch>..<target_branch>
+
+## Merge two branches
+git merge <source_branch> <target_branch>
+
+## Check which branch are merged with which one
+git branch --merged
+
+## Delete a branch
+git branch -d <branch>
+
+## Rename current branch
+git branch -m <new_branch_name>
+
+## Git rebase
+git rebase <source_branch> <target_branch>
+
+## Edit the last commit message
+git commit --amend
+
+## Edit multiple commits
+git rebase -i HEAD~4
+
+## Clone the remote repository
+git clone https://github.com/CloudAffaire/mygit.git
+
+## Add remote repository to existing local repository
+git remote add origin https://github.com/CloudAffaire/mygit.git
+
+## Check remote repository
+git remote -v
+
+## Push the changes to remote repository
+git push
+
+## Push a particular branch from local repo to remote repo
+git push --set-upstream origin <branch>
+
+## Pull the changes from remote repository
+git pull
+
+## Pull a branch from remote repo to local repo
+git pull origin <branch>
+
+## Delete a remote repo branch
+git push origin --delete <branch>
